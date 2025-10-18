@@ -17,7 +17,7 @@ from django.contrib import admin
 
 from dssat.api import regions_geojson
 from dssat.views import run_experiment
-from dssat.views import home, charts, about,clear_charts
+from dssat.views import home, charts, irrigation_charts, about,clear_charts
 from django.urls import path
 
 urlpatterns = [
@@ -27,6 +27,7 @@ urlpatterns = [
     path('charts/<str:admin1>/clear-charts/', clear_charts, name='clear-charts'),
 
     path('charts/<str:admin1>/',charts,name='charts'),
+    path('irrigation/<str:admin1>/',irrigation_charts,name='irrigation_charts'),
     path('charts/validation-chart/<str:admin1>/',home,name='validation-chart'),
     # path('charts/<str:admin1>/baseline-chart/',baseline,name='baseline-chart'),
     path('charts/<str:admin1>/run-experiment/',run_experiment,name='run-experiment'),

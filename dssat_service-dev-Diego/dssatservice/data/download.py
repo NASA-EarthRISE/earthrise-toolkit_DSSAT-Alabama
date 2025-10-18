@@ -14,9 +14,6 @@ from . import transform
 
 TMP = tempfile.gettempdir()
 
-
-c = cdsapi.Client(progress=False)
-
 VARIABLES_ERA5_API = {
     "tmax": ('2m_temperature', '24_hour_maximum'),
     "tmin": ("2m_temperature", "24_hour_minimum"),
@@ -28,7 +25,7 @@ VARIABLES_ERA5_API = {
 
 def download_era5(date:datetime, variable:str, area:list[float], folder:str=TMP):
     """
-    Download era5 data for a single day. It'll download the requested variable. 
+    Download era5 data for a single day. It'll download the requested variable.
     It returns the path to the netCDF file.
 
     Arguments
@@ -45,6 +42,7 @@ def download_era5(date:datetime, variable:str, area:list[float], folder:str=TMP)
     zip_path = ''.join(random.choices(string.ascii_uppercase + string.digits, k=16))
     zip_path = os.path.join(folder, f"{zip_path}.zip")
 
+    c = cdsapi.Client(progress=False)
     variable, statistic = VARIABLES_ERA5_API[variable]
     request_pars = {
             'format': 'zip',

@@ -4,6 +4,9 @@ setup.py
 ./spatialDSSAT/__init__.py
 ./spatialDSSAT/run.py
 ./spatialDSSAT/utils.py
+spatialDSSAT/__init__.py
+spatialDSSAT/run.py
+spatialDSSAT/utils.py
 spatialDSSAT.egg-info/PKG-INFO
 spatialDSSAT.egg-info/SOURCES.txt
 spatialDSSAT.egg-info/dependency_links.txt

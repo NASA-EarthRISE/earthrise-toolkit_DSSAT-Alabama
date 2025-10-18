@@ -1,65 +1,20 @@
-//   var xhr = ajax_call('baseline-chart/', );
-//     xhr.done(function (data) {
-//          const baselinechart = Highcharts.chart('chart', {
-//
-//      xAxis: {
-//          "title": {
-//              'text': 'Year',
-//              "style": {
-//                  "font-size": "15px",
-//              }
-//          },
-//          "labels": {
-//              "style": {
-//                  "font-size": "15px",
-//              }
-//          }
-//      },
-//      yAxis: {
-//          "title": {
-//              'text': 'Yield (kg/ha)',
-//              "style": {
-//                  "font-size": "15px"
-//              }
-//          },
-//          "labels": {
-//              "style": {
-//                  "font-size": "15px",
-//              }
-//          }
-//      },
-//
-//  });
-//         for(var i=0;i<data.column1.length;i++){
-//             baselinechart.addSeries(data.column1[i]);
-//         }
-//
-// baselinechart.addSeries(data.scatter1);
-// baselinechart.setTitle({
-//         text: 'Observed and Simulated yield for the baseline scenario in ' + admin1,
-//         style: {
-//             "font-size": "15px"
-//         }
-//     }
-//     )
-
  // chart.addSeries(data.chart,true);
- var index = $("#chart").data('highchartsChart');
+var index = $("#chart").data('highchartsChart');
 var baseline_chart= Highcharts.charts[index];
 
 
-        // document.getElementById('baseline_desc').innerHTML = data.desc;
-        var select = document.getElementById("cultivar");
-        var options = cultivar_values;
-        var option_keys =cultivar_keys;
+// document.getElementById('baseline_desc').innerHTML = data.desc;
+var select = document.getElementById("cultivar");
+var options = cultivar_types;
+var option_keys =cultivar_codes;
 
-        for (var i = 0; i < options.length; i++) {
-            var opt = options[i];
-            var el = document.createElement("option");
-            el.textContent = opt;
-            el.value = option_keys[i];
-            select.appendChild(el);
-        }
+for (var i = 0; i < options.length; i++) {
+    var opt = options[i];
+    var el = document.createElement("option");
+    el.textContent = opt;
+    el.value = option_keys[i];
+    select.appendChild(el);
+}
 
 
     // });
@@ -83,4 +38,4 @@ var baseline_chart= Highcharts.charts[index];
         $('#selected_daps').val(selected);
     });
 
-document.getElementById('adm1').innerText=admin1+', '+admin1_country;
+document.getElementById('admin1').innerText=admin1+', '+admin1_country;

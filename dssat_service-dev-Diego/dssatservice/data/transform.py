@@ -1,4 +1,3 @@
-
 """
 This module contains funtions to transform data. Transformation implies converting
 between data formats, or extrating data from some file to create a new file.
@@ -11,10 +10,12 @@ import tempfile
 from datetime import datetime
 import re
 import subprocess
+import psycopg2 as pg
 
 from osgeo import gdal
 from osgeo import osr
 from osgeo_utils import gdal_calc
+
 
 def write_tiff(lat, lon, res, data, tiffpath=None, epsg=4326):
     """
@@ -54,7 +55,7 @@ def write_tiff(lat, lon, res, data, tiffpath=None, epsg=4326):
     srs.ImportFromEPSG(epsg)
     ods.SetProjection(srs.ExportToWkt())
     ods.SetGeoTransform(
-        [min(lon) - res / 2.0, res, 0, 
+        [min(lon) - res / 2.0, res, 0,
          max(lat) + res / 2.0, 0, -res]
     )
     ods.GetRasterBand(1).WriteArray(out)
@@ -62,7 +63,9 @@ def write_tiff(lat, lon, res, data, tiffpath=None, epsg=4326):
     ods = None
     return tiffpath
 
-def nc_to_tiff(variable:str, date:datetime, ncpath:str, tiffpath:str=None, **kwargs):
+
+def nc_to_tiff(variable: str, date: datetime, ncpath: str, tiffpath: str = None,
+               **kwargs):
     """
     Convert netcdf file to tiff. Returns path to tiff.
 
@@ -71,14 +74,14 @@ def nc_to_tiff(variable:str, date:datetime, ncpath:str, tiffpath:str=None, **kwa
     variable: str
         Name of the netcdf variable
     date: datetime
-        Date to fetch from the netcdf file 
+        Date to fetch from the netcdf file
     ncpath: str
         Path to the netcdf file
     tiffpath: str
         Path to the tiff to write. If None then a tmpfile is created
     **kwargs:
-        Other kwargs can be passed. Those kwargs are lat, lon, and time , they 
-        map each variable to the netcdf variable that represents each. If not 
+        Other kwargs can be passed. Those kwargs are lat, lon, and time , they
+        map each variable to the netcdf variable that represents each. If not
         provided then default values from AgERA5 are taken
     """
     timevar = kwargs.get("time", "time")
@@ -86,16 +89,16 @@ def nc_to_tiff(variable:str, date:datetime, ncpath:str, tiffpath:str=None, **kwa
     lonvar = kwargs.get("lon", "lon")
     date = datetime(date.year, date.month, date.day)
     nc = Dataset(ncpath)
-    
+
     time = nc.variables[timevar]
     time = [datetime(t.year, t.month, t.day) for t in num2date(time[:], time.units)]
     assert date in time, f"{date.strftime('%Y-%m-%d')} not in {ncpath} file"
     time_idx = time.index(date)
 
-    data = nc.variables[variable][time_idx, : ,:].data
+    data = nc.variables[variable][time_idx, :, :].data
     lon = nc.variables[lonvar][:].data
     lat = nc.variables[latvar][:].data
-    res = (lat.max() - lat.min())/len(lat)
+    res = (lat.max() - lat.min()) / len(lat)
 
     tiffpath = write_tiff(lat, lon, res, data, tiffpath=None, epsg=4326)
     return tiffpath
@@ -110,8 +113,10 @@ ENV_STRESS_COLNAMES = (
     "devPhase", "timeSpan", "avgTmax", "avgTmin", "avgTmean", "avgSrad", "avgPhotper", "avgCO2",
     "cummRain", "cummET", "cummETp", "ndaysTminLt0", "ndaysTminLt2", "ndaysTmaxGt30",
     "ndaysTmaxGt32", "ndaysTmaxGt34", "ndaysRainGt0", "stressWatPho", "stressWatGro",
-    "stressNitPhto", "stressNitGro", "stressPhoPho", "stressPhoGro" 
+    "stressNitPhto", "stressNitGro", "stressPhoPho", "stressPhoGro"
 )
+
+
 def parse_overview(overview_str):
     """
     Parse the overview file to get environmental and stress factors
@@ -122,42 +127,51 @@ def parse_overview(overview_str):
             lines.append(
                 [n, key] + l.replace(key, "").split()
             )
-    df = pd.DataFrame(lines, columns=["RUN"]+list(ENV_STRESS_COLNAMES))
-    return df  
+    df = pd.DataFrame(lines, columns=["RUN"] + list(ENV_STRESS_COLNAMES))
+    return df
+
 
 def reproject_raster(rin, rout, rref, resampling="bilinear"):
     """
     Reprojects the rin to rout using rref as reference for extent and resolution.
-    """ 
+    """
     ref_ds = gdal.Open(rref)
     x_size, y_size = ref_ds.RasterXSize, ref_ds.RasterYSize
     x_min, dx, _, y_max, _, dy = ref_ds.GetGeoTransform()
-    x_max = x_min + dx*x_size
-    y_min = y_max + dy*y_size
+    x_max = x_min + dx * x_size
+    y_min = y_max + dy * y_size
     warp_options = gdal.WarpOptions(
         format="GTiff", outputBounds=(x_min, y_min, x_max, y_max),
         width=x_size, height=y_size, resampleAlg=resampling
     )
     gdal.Warp(rout, rin, options=warp_options)
-    
+
+
 def tiff_union(tifflist, tiffout, redf=np.mean, calc="mean(a,axis=0)"):
     """Takes a list of input tiffs and reduce them to a single raster using
         the function specified in redf. Rasters must be compatible: same size
         and resolution"""
     gdal_calc.Calc(calc=calc, a=tifflist, outfile=tiffout)
 
-def db_to_tiff(dbname, schema, table, where, saveto):
+
+def db_to_tiff(con: pg.extensions.connection, schema, table, where, saveto):
     """
     Exports raster fom table to tiff.
     """
+    cur = con.cursor()
+    user = con.info.user
+    pswd = con.info.password
+    cur.execute("SELECT current_database()")
+    dbname = cur.fetchall()[0][0]
+    # TODO: This won't work when connection to a remote database
     sql_args = \
-        f"PG:dbname='{dbname}' user='dquintero' password='eQY3_Fwd' " + \
-        f"schema='{schema}' table='{table}' where='{where}' " +\
+        f"PG:dbname='{dbname}' user='{user}'" + " password='{0}' ".format(pswd) + \
+        f"schema='{schema}' table='{table}' where='{where}' " + \
         "mode='2'"
     translate_options = gdal.TranslateOptions(format="GTiff")
     gdal.Translate(destName=saveto, srcDS=sql_args, options=translate_options)
-    
-    
+
+
 def rast_calc(A, B, calc, outfile):
     """
     Does raster calculations using numpy syntax. calc is the operation to perform,

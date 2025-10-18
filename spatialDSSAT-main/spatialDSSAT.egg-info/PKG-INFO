@@ -1,4 +1,4 @@
-Metadata-Version: 2.1
+Metadata-Version: 2.4
 Name: spatialDSSAT
 Version: 0.0b0
 Summary: A library to run DSSAT spatial mode using python
@@ -18,6 +18,15 @@ Requires-Dist: tqdm
 Requires-Dist: rasterio
 Requires-Dist: netCDF4
 Requires-Dist: geopandas
+Dynamic: author
+Dynamic: author-email
+Dynamic: classifier
+Dynamic: description
+Dynamic: description-content-type
+Dynamic: license
+Dynamic: requires-dist
+Dynamic: requires-python
+Dynamic: summary
 
 # spatialDSSAT
 Just a set of modules and functions to run DSSAT in spatial mode. With this package you will be able to simulate up to 99 different locations per run. You can define different weather, soil, nitrogen application, planting date, and cultivar for each location. Some simulation options can be defined. This allows the user to test different scenarios, like no water stress, no nitrogen stress, nitrogen fixation, etc.
