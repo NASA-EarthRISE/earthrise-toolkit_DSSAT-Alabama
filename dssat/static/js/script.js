@@ -13,11 +13,7 @@ function load_charts(admin1){
         +'//'+window.location.host
         +'/charts/'+admin1+'/';
 }
-function load_irrigation_charts(admin1){
-    window.location.href=window.location.protocol
-        +'//'+window.location.host
-        +'/irrigation/'+admin1+'/';
-}
+
 
 function ajax_call(ajax_url, ajax_data) {
     //update database
@@ -133,15 +129,16 @@ function whenClicked_region(e){
   autoPan: true});
     popup.setLatLng(e.latlng)
          .setContent(
-             '<h4>'+admin1+'</h4>'
+  "<h4>" + admin1 + "</h4>" +
+  '<br><div class="d-flex justify-content-between w-100"><center>' +
+  '<button id="charts" class="btn btn-secondary" style="font-weight: bold; background: green" ' +
+  'onclick="load_charts(' + str + ')">Sensitivity Analysis</button>' +
+  '&nbsp;' +
+  '<button id="irrigation_charts" class="btn btn-secondary" style="font-weight: bold; background: green" ' +
+  'onclick="postToUrl(\'/irrigation/\', { param1: ' + str + ' })">Irrigation Analysis</button>' +
+  '</center></div>'
+)
 
-             + '<br><div class="d-flex justify-content-between w-100"><center><button id="charts" class="btn btn-secondary"'
-             + 'style="font-weight: bold; background: green"'
-             + ' onclick="load_charts('+str+')">Sensitivity Analysis</button>'
-               + '&nbsp<button id="irrigation_charts" class="btn btn-secondary"'
-             + 'style="font-weight: bold; background: green"'
-             + ' onclick="load_irrigation_charts('+str+')">Irrigation Analysis</button></center></div>'
-             )
         .openOn(map);
 }
 
@@ -188,3 +185,36 @@ function onEachFeature_regions(feature, layer) {
 }
 
 
+function postToUrl(url, params) {
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = url;
+
+    // Add CSRF token
+    const csrfToken = getCookie('csrftoken');
+    if (csrfToken) {
+        const csrfInput = document.createElement('input');
+        csrfInput.type = 'hidden';
+        csrfInput.name = 'csrfmiddlewaretoken';
+        csrfInput.value = csrfToken;
+        form.appendChild(csrfInput);
+    }
+
+    // Add your parameters
+    for (const key in params) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = key;
+        input.value = params[key];
+        form.appendChild(input);
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
+
+function load_irrigation_charts(admin1){
+    window.location.href=window.location.protocol
+        +'//'+window.location.host
+        +'/irrigation/'+admin1+'/';
+}

@@ -150,32 +150,92 @@ def charts(request, admin1='Nakuru_kenya'):
         'stress_chart_nitrogen': to_js_literal(stress_chart_nitrogen),
         'max_date': max_date
     })
-
+@csrf_exempt
 def irrigation_charts(request, admin1='Nakuru_kenya'):
-    admin1_name = admin1.split('_')[0]
-    admin1_country = 'alabama' #admin1.split('_')[1]
+    if request.method == 'POST':
+        admin1 = request.POST.get('param1')
+        admin1_name = admin1.split('_')[0]
+        admin1_country = 'alabama' #admin1.split('_')[1]
 
-    # Store connection and session data in Django session
-    con_params = {
-        "database": config['USERNAME'],
-        "user": config['DBUSER'],
-        "password": config['PASSWORD'],
-        "host": config['HOST'],
-        "port": 5432
-    }
-    session_data = {
-        "admin1_country": admin1_country,
-        "admin1_name": admin1_name,
-    }
-    request.session['con_params'] = con_params
-    request.session['session_data'] = session_data
+        conn = psycopg2.connect(
+            dbname=config['USERNAME'],
+            user=config['DBUSER'],
+            password=config['PASSWORD'],
+            host= config['HOST'],
+            port="5432"
+        )
 
-    # Recreate the Session object for initializing charts
-    session = get_session(request)
 
-    # Initialize charts
-    # anom_chart = init_anomalies_chart()
-    print(session)
+        cultivar = 'long'#request.POST.get('cultivar')
+        soil_type = 'unknown'#request.POST.get('soil_type')
+        print(admin1_name)
+
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT distinct cultivar FROM alabama.historical_yield ORDER BY cultivar ASC")
+            rows = cursor.fetchall()
+            cultivars=[row[0].strip() for row in rows]
+
+            cursor.execute("SELECT distinct soil_type FROM alabama.soil_type ORDER BY soil_type ASC")
+            rows = cursor.fetchall()
+            soil_types = [row[0].strip() for row in rows]
+
+            query = "SELECT fips_code FROM alabama.county WHERE LOWER(name::text) = LOWER(%s)"
+            cursor.execute(query, (admin1_name,))
+            result = cursor.fetchone()
+
+            cursor.execute("""
+                  SELECT crop_name, AVG(rainfed) AS avg_rainfed, AVG(irrigated) AS avg_irrigated
+                  FROM alabama.historical_yield
+                  WHERE cultivar = %s AND soil_type = %s AND fips_code = %s
+                  GROUP BY crop_name
+                  ORDER BY crop_name;
+              """, [cultivar, soil_type, result[0]])
+
+            rows = cursor.fetchall()
+
+            # Prepare data lists for chart
+            categories = [row[0] for row in rows]
+            print(categories)
+            rainfed = [round(row[1], 2) for row in rows]
+            irrigated = [round(row[2], 2) for row in rows]
+
+            #by year
+            cursor.execute("""
+                              SELECT year, AVG(rainfed) AS avg_rainfed,
+                                  AVG(irrigated) AS avg_irrigated
+                                FROM 
+                                  alabama.historical_yield
+                                WHERE 
+                                  cultivar = %s
+                                  AND soil_type = %s
+                                  AND fips_code = %s
+                                GROUP BY 
+                                  year
+                                ORDER BY 
+                                  year;
+                          """, [cultivar, soil_type, result[0]])
+            results = cursor.fetchall()
+            years = [row[0] for row in results]
+            rainfed2 = [row[1] for row in results]
+            irrigated2 = [row[2] for row in results]
+
+            context = {
+                'cultivars':cultivars,
+                'soil_types':soil_types,
+                'categories': json.dumps(categories),
+                'rainfed': json.dumps(rainfed),
+                'irrigated': json.dumps(irrigated),
+                'years' : years,
+                'rainfed_year' : rainfed2,
+                'irrigated_year' : irrigated2,
+                'admin1': admin1_name,
+                'admin1_country': admin1_country.title(),
+            }
+        # Render the chart snippet template
+        return render(request, 'irrigation_chart.html', context)
+
+        # For GET or others, just return empty or a simple message
+    return render(request, 'irrigation_chart.html', {})
 
 
 @csrf_exempt
