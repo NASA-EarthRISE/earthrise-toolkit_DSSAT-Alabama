@@ -196,8 +196,8 @@ def irrigation_charts(request, admin1='Nakuru_kenya'):
             # Prepare data lists for chart
             categories = [row[0] for row in rows]
             print(categories)
-            rainfed = [round(row[1], 2) for row in rows]
-            irrigated = [round(row[2], 2) for row in rows]
+            rainfed = [round(row[1]*0.0159, 2) for row in rows]
+            irrigated = [round(row[2]*0.0159, 2) for row in rows]
 
             #by year
             cursor.execute("""
@@ -216,8 +216,8 @@ def irrigation_charts(request, admin1='Nakuru_kenya'):
                           """, [cultivar, soil_type, result[0]])
             results = cursor.fetchall()
             years = [row[0] for row in results]
-            rainfed2 = [row[1] for row in results]
-            irrigated2 = [row[2] for row in results]
+            rainfed2 = [row[1]*0.0159 for row in results]
+            irrigated2 = [row[2]*0.0159 for row in results]
 
             context = {
                 'cultivars':cultivars,
@@ -228,7 +228,7 @@ def irrigation_charts(request, admin1='Nakuru_kenya'):
                 'years' : years,
                 'rainfed_year' : rainfed2,
                 'irrigated_year' : irrigated2,
-                'admin1': admin1_name,
+                'admin1': admin1_name+', '+'Alabama',
                 'admin1_country': admin1_country.title(),
             }
         # Render the chart snippet template
