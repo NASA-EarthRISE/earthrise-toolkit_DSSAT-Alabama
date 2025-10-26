@@ -9,10 +9,10 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light " style="background-color: darkseagreen">
+<nav class="navbar navbar-expand-lg navbar-light " style="background-color: #0077c8;">
   <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}">
-          <img src="{% static 'img/SERVIR_flat_white2.png' %}" alt="SERVIR logo" style="height:40px; max-width: none;"></a>
+<!--      <a class="navbar-brand" href="{% url 'home' %}">-->
+<!--          <img src="{% static 'img/SERVIR_flat_white2.png' %}" alt="SERVIR logo" style="height:40px; max-width: none;"></a>-->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -26,9 +26,6 @@
         <li class="nav-item">
           <a class="nav-link text-light" aria-current="page" href="{% url 'home' %}">Map</a>
         </li>
-<!--        <li class="nav-item">-->
-<!--          <a class="nav-link text-light" href="{% url 'charts' admin1='Nakuru' %}">Charts</a>-->
-<!--        </li>-->
         <li class="nav-item">
           <a class="nav-link active text-light" href='{% url 'about' %}'>About</a>
         </li>

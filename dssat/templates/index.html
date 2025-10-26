@@ -31,9 +31,9 @@
 <script>
 
 </script>
-<nav class="navbar navbar-expand-lg navbar-light " style="background-color: darkseagreen">
+<nav class="navbar navbar-expand-lg navbar-light " style="background-color: #0077c8">
   <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}">
+<!--      <a class="navbar-brand" href="{% url 'home' %}">-->
 <!--          <img src="{% static 'img/SERVIR_flat_white2.png' %}" alt="SERVIR logo" style="height:40px; max-width: none;"></a>-->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -48,9 +48,7 @@
         <li class="nav-item">
           <a class="nav-link active text-light" aria-current="page" href="{% url 'home' %}">Map</a>
         </li>
-<!--        <li class="nav-item">-->
-<!--          <a class="nav-link text-light" href="{% url 'charts' admin1='Nakuru' %}">Charts</a>-->
-<!--        </li>-->
+
         <li class="nav-item">
           <a class="nav-link text-light" href='{% url 'about' %}'>About</a>
         </li>
@@ -76,14 +74,13 @@
 </div>
 <div id="floating_div" style="width: 300px;
     background-color: white;
-    color: darkseagreen;
     position: fixed;
     z-index: 999;
     top: 300;
     left: 20;
     border-radius: 20px;
     padding: 10px;">
-    <strong>Please click on one of the regions to explore more.</strong>
+    Please click on one of the regions to explore more.
 </div>
 <script src="{% static 'js/script.js' %}"></script>
 <script src="{% static 'highcharts_config/baseline_template.js' %}"></script>

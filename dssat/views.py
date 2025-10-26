@@ -76,12 +76,13 @@ def get_geojson():
     return data["result"]
 
 
-def home(request, admin1='Nakuru'):
+def home(request):
     return render(request, 'index.html', )
 
 
 @csrf_exempt
-def charts(request, admin1='Nakuru_kenya'):
+def sensitivity_charts(request):
+    admin1 = request.POST.get('param1')
     admin1_name = admin1.split('_')[0]
     admin1_country = 'alabama' #admin1.split('_')[1]
 
@@ -137,7 +138,7 @@ def charts(request, admin1='Nakuru_kenya'):
     # print(cultivars, cultivars_codes)
     max_date = datetime.today() + timedelta(30)
     # Render the response
-    return render(request, 'charts.html', {
+    return render(request, 'sensitivity_chart.html', {
         'admin1': admin1_name,
         'admin1_country': admin1_country.title(),
         'cultivar_types': cultivar_types,  # Placeholder, modify as needed
@@ -151,7 +152,7 @@ def charts(request, admin1='Nakuru_kenya'):
         'max_date': max_date
     })
 @csrf_exempt
-def irrigation_charts(request, admin1='Nakuru_kenya'):
+def irrigation_charts(request):
     if request.method == 'POST':
         admin1 = request.POST.get('param1')
         admin1_name = admin1.split('_')[0]
@@ -239,8 +240,9 @@ def irrigation_charts(request, admin1='Nakuru_kenya'):
 
 
 @csrf_exempt
-def run_experiment(request, admin1):
+def run_experiment(request):
     # try:
+    admin1 = request.POST.get('param1')
     schema = request.POST.get('schema')
     admin1 = request.POST.get('admin1')
 

@@ -132,7 +132,7 @@ function whenClicked_region(e){
   "<h4>" + admin1 + "</h4>" +
   '<br><div class="d-flex justify-content-between w-100"><center>' +
   '<button id="charts" class="btn btn-secondary" style="font-weight: bold; background: green" ' +
-  'onclick="load_charts(' + str + ')">Sensitivity Analysis</button>' +
+  'onclick="postToUrl(\'/sensitivity/\', { param1: ' + str + ' })">Sensitivity Analysis</button>' +
   '&nbsp;' +
   '<button id="irrigation_charts" class="btn btn-secondary" style="font-weight: bold; background: green" ' +
   'onclick="postToUrl(\'/irrigation/\', { param1: ' + str + ' })">Irrigation Analysis</button>' +
