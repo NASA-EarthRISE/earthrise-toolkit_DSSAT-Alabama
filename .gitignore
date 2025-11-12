@@ -11,5 +11,5 @@
 *.pyc
 
 # Ignore static files directory
-static/
+#static/
 db.sqlite3
