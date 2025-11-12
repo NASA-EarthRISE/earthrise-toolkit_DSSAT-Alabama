@@ -21,16 +21,16 @@ from dssat.views import home, sensitivity_charts, irrigation_charts, about,clear
 from django.urls import path
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('',home,name='home'),
+    path('demo/admin/', admin.site.urls),
+    path('demo/',home,name='home'),
     # path('run-spatial-dssat/',run_spatial_dssat,name='run-spatial-dssat'),
-    path('sensitivity/clear-charts/', clear_charts, name='clear-charts'),
+    path('demo/sensitivity/clear-charts/', clear_charts, name='clear-charts'),
 
-    path('sensitivity/',sensitivity_charts,name='sensitivity-charts'),
-    path('irrigation/',irrigation_charts,name='irrigation_charts'),
-    path('sensitivity/validation-char/t',home,name='validation-chart'),
+    path('demo/sensitivity/',sensitivity_charts,name='sensitivity-charts'),
+    path('demo/irrigation/',irrigation_charts,name='irrigation_charts'),
+    path('demo/sensitivity/validation-char/t',home,name='validation-chart'),
     # path('charts/<str:admin1>/baseline-chart/',baseline,name='baseline-chart'),
-    path('sensitivity/run-experiment/',run_experiment,name='run-experiment'),
-    path('get-regions/',regions_geojson,name='regions-geojson'),
-    path('about/',about,name='about'),
+    path('demo/sensitivity/run-experiment/',run_experiment,name='run-experiment'),
+    path('demo/get-regions/',regions_geojson,name='regions-geojson'),
+    path('demo/about/',about,name='about'),
 ]
