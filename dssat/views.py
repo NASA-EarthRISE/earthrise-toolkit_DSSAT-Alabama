@@ -268,7 +268,7 @@ def run_experiment(request):
     ]
     session.simPars.irrigation = request.POST.get('irrigation') == "yes"
     print(session.simPars)
-    session.run_experiment(fakerun=False)
+    session.run_experiment(fakerun=True)
 
     # Update charts with new data
     series_len = len(range_chart["userOptions"]["series"])
