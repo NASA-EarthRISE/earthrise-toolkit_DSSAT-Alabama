@@ -11,7 +11,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 function load_charts(admin1){
     window.location.href=window.location.protocol
         +'//'+window.location.host
-        +'/charts/'+admin1+'/';
+        +'/demo/charts/'+admin1+'/';
 }
 
 
@@ -132,10 +132,10 @@ function whenClicked_region(e){
   "<h4>" + admin1 + "</h4>" +
   '<br><div class="d-flex justify-content-between w-100"><center>' +
   '<button id="charts" class="btn btn-secondary" style="font-weight: bold; background: green" ' +
-  'onclick="postToUrl(\'/sensitivity/\', { param1: ' + str + ' })">Sensitivity Analysis</button>' +
+  'onclick="postToUrl(\'/demo/sensitivity/\', { param1: ' + str + ' })">Sensitivity Analysis</button>' +
   '&nbsp;' +
   '<button id="irrigation_charts" class="btn btn-secondary" style="font-weight: bold; background: green" ' +
-  'onclick="postToUrl(\'/irrigation/\', { param1: ' + str + ' })">Irrigation Analysis</button>' +
+  'onclick="postToUrl(\'/demo/irrigation/\', { param1: ' + str + ' })">Irrigation Analysis</button>' +
   '</center></div>'
 )
 
@@ -216,5 +216,5 @@ function postToUrl(url, params) {
 function load_irrigation_charts(admin1){
     window.location.href=window.location.protocol
         +'//'+window.location.host
-        +'/irrigation/'+admin1+'/';
+        +'/demo/irrigation/'+admin1+'/';
 }
