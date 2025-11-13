@@ -48,7 +48,7 @@
   </style>
 </head>
 
-<body>
+<body style="width:100%">
   <script>
     var cultivar_types={{ cultivar_types|safe }};
     var cultivar_codes={{ cultivar_codes|safe }};
@@ -60,9 +60,8 @@
 
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0077c8;height: 70px">
     <div class="container-fluid">
-<!--        <a class="navbar-brand" href="{% url 'home' %}">-->
-<!--&lt;!&ndash;          <img src="{% static 'img/SERVIR_flat_white2.png' %}" alt="SERVIR logo" style="height:40px; max-width: none;">&ndash;&gt;-->
-<!--        </a>-->
+ <a class="navbar-brand" href="{% url 'home' %}">
+          <img src="{% static 'img/UAH_wht_logo.png' %}" alt="UAH logo" style="height:40px; max-width: none;"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -81,6 +80,7 @@
       </div>
     </div>
   </nav>
+  <div class="m-auto" style="width:85%">
   <div id="blur_div" style="position: fixed; background: #ffffffa6; overflow: hidden; display: none; /* z-index: 999; */ z-index: 500; inset: 0">
   </div>
   <button class="btn btn-success" type="button" disabled id="spinner_button" style="position: fixed; top: 50%; left: 50%; z-index: 999;display: none;">
@@ -128,7 +128,7 @@
 
     <div id="popup-box" class="modal">
       <div class="popup-content">
-        <img src="/static/img/Plot_interpretation.png" alt="SERVIR Global" style="max-height: 600px;">
+        <img src="{% static 'img/Plot_interpretation.png' %}" alt="plot" style="max-height: 600px;">
         <a href="#" style="position: absolute; top: 10px; right: 10px; color: #fe0606; font-size: 30px; text-decoration: none;">&times;</a>
       </div>
     </div>
@@ -236,17 +236,8 @@
       </div>
     </div>
   </div>
+</div>
 
-
-  <footer id="footer">
-    <div class="ml-auto footer" style="height:50px">
-      <div class="d-flex align-items-center justify-content-between h-100">
-<!--        <a href="https://servirglobal.net">-->
-<!--          <img src="/static/img/servir_global_full_logo_white.png" alt="SERVIR Global" style="margin-left: 8px; max-height: 21px;">-->
-<!--        </a>-->
-      </div>
-    </div>
-  </footer>
   <script src="{% static 'js/sensitivity.js' %}"></script>
   <script src="{% static 'highcharts_config/baseline_template.js' %}"></script>
   <script id="charts">
