@@ -101,7 +101,7 @@ function zoomToRegions(schema){
 // }
 //
 //
-  zoomToRegions('alabama');
+
 // // For countries feature
 
 // For each admin1 layer
@@ -157,7 +157,8 @@ info.update = function (props) {
         + Math.round(props.pred) + ' kg/ha'
         : 'Hover over a county');
 };
-
+info.addTo(map);
+  zoomToRegions('alabama');
 function highlightFeature(e) {
     var layer = e.target;
     layer.setStyle({
