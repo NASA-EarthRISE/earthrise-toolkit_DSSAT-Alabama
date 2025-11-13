@@ -46,6 +46,36 @@
         z-index: 1000;
     }
   </style>
+    <style>
+.modal {
+  display: none; /* hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.6);
+}
+
+/* When the modal’s ID matches the URL hash (#popup-box), show it */
+.modal:target {
+  display: block;
+}
+
+.popup-content {
+  position: relative;
+  background: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 60%;
+  max-width: 800px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  text-align: center;
+}
+</style>
 </head>
 
 <body style="width:100%">
