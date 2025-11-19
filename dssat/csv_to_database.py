@@ -4,7 +4,7 @@ import json
 from sqlalchemy import create_engine, text
 
 # === CONFIGURATION ===
-csv_file = 'Yield_2010_2020.csv'  # Replace with your CSV file path
+csv_file = 'yield_with_precip_irrigation_2010_2020.csv'  # Replace with your CSV file path
 schema = 'alabama'
 table_name = 'historical_yield'
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -16,16 +16,20 @@ engine = create_engine(db_url)
 
 # === LOAD AND PREPARE CSV ===
 df = pd.read_csv(csv_file)
-df = df.drop(columns=df.columns[0])  # Drop ID column
+# df = df.drop(columns=df.columns[0])  # Drop ID column
 
 # Rename CSV columns to expected names
-df.columns = ['county', 'fips_code', 'rainfed', 'irrigated', 'year']
+df.columns = ['county', 'fips_code', 'rainfed', 'irrigated', 'year','irrigated_mean','irrigated_median','precipitation_mean','precipitation_median']
 
 # Clean and convert types
 df['fips_code'] = df['fips_code'].astype(str).str.extract(r'(\d+)').astype(int)
 df['rainfed'] = df['rainfed'].astype(float).round(4)
 df['irrigated'] = df['irrigated'].astype(float).round(4)
 df['year'] = df['year'].astype(int)
+df['irrigated_mean'] = df['irrigated_mean'].astype(float).round(4)
+df['irrigated_median'] = df['irrigated_median'].astype(float).round(4)
+df['precipitation_mean'] = df['precipitation_mean'].astype(float).round(4)
+df['precipitation_median'] = df['precipitation_median'].astype(float).round(4)
 
 # Add default values for missing columns
 df['crop_name'] = 'corn'
@@ -62,7 +66,7 @@ with engine.begin() as conn:
 
 # === LOAD EXISTING historical_yield TO DEDUPLICATE ===
 query = f"""
-SELECT crop_name, soil_type, rainfed, irrigated, year, cultivar, fips_code
+SELECT crop_name, soil_type, rainfed, irrigated, year, cultivar, fips_code, precipitation_mean, irrigated_mean, precipitation_median, irrigated_median
 FROM {schema}.{table_name}
 """
 existing_df = pd.read_sql(query, engine)
@@ -72,7 +76,7 @@ for col in ['crop_name', 'soil_type', 'cultivar']:
     existing_df[col] = existing_df[col].str.strip().str.lower()
 
 # Round numeric columns in existing data
-for col in ['rainfed', 'irrigated']:
+for col in ['rainfed', 'irrigated','precipitation_mean', 'irrigated_mean', 'precipitation_median', 'irrigated_median']:
     existing_df[col] = existing_df[col].astype(float).round(4)
 
 # Ensure int types
@@ -81,7 +85,7 @@ for col in ['year', 'fips_code']:
     existing_df[col] = existing_df[col].astype(int)
 
 # Define key columns for deduplication
-key_cols = ['crop_name', 'soil_type', 'rainfed', 'irrigated', 'year', 'cultivar', 'fips_code']
+key_cols = ['crop_name', 'soil_type', 'rainfed', 'irrigated', 'precipitation_mean', 'irrigated_mean', 'precipitation_median', 'irrigated_median', 'year', 'cultivar', 'fips_code']
 
 # Sanity check for missing columns
 missing = [col for col in key_cols if col not in df.columns]

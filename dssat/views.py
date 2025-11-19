@@ -156,87 +156,88 @@ def irrigation_charts(request):
     if request.method == 'POST':
         admin1 = request.POST.get('param1')
         admin1_name = admin1.split('_')[0]
-        admin1_country = 'alabama' #admin1.split('_')[1]
+        admin1_country = 'alabama'
 
         conn = psycopg2.connect(
             dbname=config['USERNAME'],
             user=config['DBUSER'],
             password=config['PASSWORD'],
-            host= config['HOST'],
+            host=config['HOST'],
             port="5432"
         )
 
-
-        cultivar = 'long'#request.POST.get('cultivar')
-        soil_type = 'unknown'#request.POST.get('soil_type')
-        print(admin1_name)
+        cultivar = 'long'  # Example: You can dynamically get this value
+        soil_type = 'unknown'  # Example: You can dynamically get this value
 
         with conn.cursor() as cursor:
-            cursor.execute("SELECT distinct cultivar FROM alabama.historical_yield ORDER BY cultivar ASC")
-            rows = cursor.fetchall()
-            cultivars=[row[0].strip() for row in rows]
+            # Dropdowns for cultivars and soil types
+            cursor.execute("SELECT DISTINCT cultivar FROM alabama.historical_yield ORDER BY cultivar ASC")
+            cultivars = [row[0].strip() for row in cursor.fetchall()]
 
-            cursor.execute("SELECT distinct soil_type FROM alabama.soil_type ORDER BY soil_type ASC")
-            rows = cursor.fetchall()
-            soil_types = [row[0].strip() for row in rows]
+            cursor.execute("SELECT DISTINCT soil_type FROM alabama.soil_type ORDER BY soil_type ASC")
+            soil_types = [row[0].strip() for row in cursor.fetchall()]
 
-            query = "SELECT fips_code FROM alabama.county WHERE LOWER(name::text) = LOWER(%s)"
-            cursor.execute(query, (admin1_name,))
-            result = cursor.fetchone()
+            # Get FIPS code for the given county
+            cursor.execute("SELECT fips_code FROM alabama.county WHERE LOWER(name::text) = LOWER(%s)", (admin1_name,))
+            fips_code = cursor.fetchone()[0]
 
+            # Long-term average per crop
             cursor.execute("""
-                  SELECT crop_name, AVG(rainfed) AS avg_rainfed, AVG(irrigated) AS avg_irrigated
-                  FROM alabama.historical_yield
-                  WHERE cultivar = %s AND soil_type = %s AND fips_code = %s
-                  GROUP BY crop_name
-                  ORDER BY crop_name;
-              """, [cultivar, soil_type, result[0]])
-
+                SELECT crop_name, AVG(rainfed) AS avg_rainfed, AVG(irrigated) AS avg_irrigated
+                FROM alabama.historical_yield
+                WHERE cultivar = %s AND soil_type = %s AND fips_code = %s
+                GROUP BY crop_name
+                ORDER BY crop_name;
+            """, [cultivar, soil_type, fips_code])
             rows = cursor.fetchall()
 
-            # Prepare data lists for chart
+            # Extract the categories (crop names) and averages
             categories = [row[0] for row in rows]
-            print(categories)
-            rainfed = [round(row[1]*0.0159, 2) for row in rows]
-            irrigated = [round(row[2]*0.0159, 2) for row in rows]
+            rainfed = [round(row[1]*0.0159, 2) for row in rows]  # Apply unit conversion if necessary
+            irrigated = [round(row[2]*0.0159, 2) for row in rows]  # Apply unit conversion if necessary
 
-            #by year
+            # By year for the new chart (no aggregation for means)
             cursor.execute("""
-                              SELECT year, AVG(rainfed) AS avg_rainfed,
-                                  AVG(irrigated) AS avg_irrigated
-                                FROM 
-                                  alabama.historical_yield
-                                WHERE 
-                                  cultivar = %s
-                                  AND soil_type = %s
-                                  AND fips_code = %s
-                                GROUP BY 
-                                  year
-                                ORDER BY 
-                                  year;
-                          """, [cultivar, soil_type, result[0]])
+                SELECT year,
+                       rainfed,
+                       irrigated,
+                       precipitation_mean,
+                       irrigated_mean
+                FROM alabama.historical_yield
+                WHERE cultivar = %s AND soil_type = %s AND fips_code = %s
+                ORDER BY year;
+            """, [cultivar, soil_type, fips_code])
             results = cursor.fetchall()
-            years = [row[0] for row in results]
-            rainfed2 = [row[1]*0.0159 for row in results]
-            irrigated2 = [row[2]*0.0159 for row in results]
 
+            # Extract year-based data
+            years = [row[0] for row in results]
+            rainfed_year = [row[1]*0.0159 for row in results]  # Apply unit conversion if necessary
+            irrigated_year = [row[2]*0.0159 for row in results]  # Apply unit conversion if necessary
+            precip_mean_year = [row[3]  for row in results]  # Apply unit conversion if necessary
+            irrigated_mean_year = [row[4] for row in results]  # Apply unit conversion if necessary
+
+            # Pass the data to the context
             context = {
-                'cultivars':cultivars,
-                'soil_types':soil_types,
+                'cultivars': cultivars,
+                'soil_types': soil_types,
                 'categories': json.dumps(categories),
                 'rainfed': json.dumps(rainfed),
                 'irrigated': json.dumps(irrigated),
-                'years' : years,
-                'rainfed_year' : rainfed2,
-                'irrigated_year' : irrigated2,
-                'admin1': admin1_name+', '+'Alabama',
+                'years': json.dumps(years),
+                'rainfed_year': json.dumps(rainfed_year),
+                'irrigated_year': json.dumps(irrigated_year),
+                'precip_mean_year': json.dumps(precip_mean_year),
+                'irrigated_mean_year': json.dumps(irrigated_mean_year),
+                'admin1': f"{admin1_name}, Alabama",
                 'admin1_country': admin1_country.title(),
             }
-        # Render the chart snippet template
+
         return render(request, 'irrigation_chart.html', context)
 
-        # For GET or others, just return empty or a simple message
+    # If GET or other methods, render the page with an empty context
     return render(request, 'irrigation_chart.html', {})
+
+
 
 
 @csrf_exempt

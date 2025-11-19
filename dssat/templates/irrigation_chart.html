@@ -4,86 +4,98 @@
     <title>DSSAT-Web</title>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
 </head>
+
 <body>
 <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0077c8;height: 70px">
     <div class="container-fluid">
- <a class="navbar-brand" href="{% url 'home' %}">
-          <img src="{% static 'img/UAH_wht_logo.png' %}" alt="UAH logo" style="height:40px; max-width: none;"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'img/UAH_wht_logo.png' %}" alt="UAH logo" style="height:40px; max-width: none;">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
         </button>
-        <h3 style="display: inline; color: white; margin: auto; text-align: center; width: 100%;">
-          Dssat Web App : V1
-        </h3>
+
+        <h3 style="display: inline; color: white; margin: auto; text-align: center; width: 100%;">Dssat Web App : V1</h3>
+
         <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link text-light" aria-current="page" href="{% url 'home' %}">Map</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light" href='{% url 'about' %}'>About</a>
-          </li>
-        </ul>
-      </div>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'home' %}">Map</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-light" href="{% url 'about' %}">About</a>
+                </li>
+            </ul>
+        </div>
     </div>
-
 </nav>
+
 <div class="m-auto" style="width:90%">
-<div class="row m-2">
-    <div class="col">
-    <h4>
-      Long Term Average Yield results in {{admin1}}
-    </h4>
-            <p>The plots below display the long term average yield across all years (first chart) and long term average by year (second chart) for the maize. </p>
-    </div>
-<div class="row m-2">
-    <!-- Cultivar Dropdown -->
-    <div class="col-auto">
-      <label for="cultivarSelect" class="col-form-label">Cultivar:</label>
-    </div>
-    <div class="col-auto">
-      <select class="form-select" id="cultivarSelect">
-         {% for name in cultivars %}
-            <option value="{{ name }}">{{ name }}</option>
-          {% endfor %}
-              </select>
+    <div class="row m-2">
+        <div class="col">
+            <h4>Long Term Average Yield results in {{admin1}}</h4>
+            <p>The plots below display the long term average yield across all years (first chart) and long term average by year (second chart) for the maize.</p>
+        </div>
+
+        <div class="row m-2">
+            <!-- Cultivar Dropdown -->
+            <div class="col-auto">
+                <label for="cultivarSelect" class="col-form-label">Cultivar:</label>
+            </div>
+            <div class="col-auto">
+                <select class="form-select" id="cultivarSelect">
+                    {% for name in cultivars %}
+                        <option value="{{ name }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Soil Dropdown -->
+            <div class="col-auto">
+                <label for="soilSelect" class="col-form-label">Soil Type:</label>
+            </div>
+            <div class="col-auto">
+                <select class="form-select" id="soilSelect">
+                    {% for name in soil_types %}
+                        <option value="{{ name }}">{{ name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-auto">
+                <button id="submitBtn" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
     </div>
 
-    <!-- Soil Type Dropdown -->
-    <div class="col-auto">
-      <label for="soilSelect" class="col-form-label">Soil Type:</label>
+    <!-- CHARTS -->
+    <div class="row m-2">
+        <div id="container" class="col-3 float-start" style="height:400px;"></div>
+        <div id="container_by_year" class="col-9 float-end" style="height:400px;"></div>
     </div>
-    <div class="col-auto">
-      <select class="form-select" id="soilSelect">
-        {% for name in soil_types %}
-            <option value="{{ name }}">{{ name }}</option>
-          {% endfor %}
-              </select>
+
+    <div class="row m-2">
+        <div id="donut_means_container"  class="col-3 float-start" style="height:400px;"></div>
+    <div id="stacked_year_container" class="col-9 float-end"  style="height:400px;"></div>
     </div>
-         <!-- Submit Button -->
-    <div class="col-auto">
-      <button id="submitBtn" class="btn btn-primary">Submit</button>
-    </div>
- </div>
 </div>
 
-<div class="row m-2">
- <div id="container" class="col-3 float-start" style="height:400px;"></div>
- <div id="container_by_year" class="col-9 float-end" style="height:400px;"></div>
-    </div>
-</div>
-    <!-- Now the content is valid JSON -->
-    <script id="categories-data" type="application/json">{{ categories|safe }}</script>
-    <script id="rainfed-data" type="application/json">{{ rainfed|safe }}</script>
-    <script id="irrigated-data" type="application/json">{{ irrigated|safe }}</script>
-  <script id="rainfed-data-year" type="application/json">{{ rainfed_year|safe }}</script>
-  <script id="years" type="application/json">{{ years |safe }}</script>
-    <script id="irrigated-data-year" type="application/json">{{ irrigated_year|safe }}</script>
+<!-- CLEAN JSON SCRIPT TAGS (NO EXTRA WHITESPACE!) -->
+<script id="categories-data" type="application/json">{{ categories|safe }}</script>
+<script id="rainfed-data" type="application/json">{{ rainfed|safe }}</script>
+<script id="irrigated-data" type="application/json">{{ irrigated|safe }}</script>
 
-    <script src="{% static 'js/irrigation.js' %}"></script>
+<script id="rainfed-data-year" type="application/json">{{ rainfed_year|safe }}</script>
+<script id="irrigated-data-year" type="application/json">{{ irrigated_year|safe }}</script>
 
+<script id="years" type="application/json">{{ years|safe }}</script>
+
+<script id="precipitation-mean-year" type="application/json">{{ precip_mean_year|safe }}</script>
+<script id="irrigated-mean-year" type="application/json">{{ irrigated_mean_year|safe }}</script>
+
+<script src="{% static 'js/irrigation.js' %}"></script>
 
 </body>
 </html>
