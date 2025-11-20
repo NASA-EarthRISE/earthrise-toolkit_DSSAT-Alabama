@@ -213,8 +213,8 @@ def irrigation_charts(request):
             years = [row[0] for row in results]
             rainfed_year = [row[1]*0.0159 for row in results]  # Apply unit conversion if necessary
             irrigated_year = [row[2]*0.0159 for row in results]  # Apply unit conversion if necessary
-            precip_mean_year = [row[3]  for row in results]  # Apply unit conversion if necessary
-            irrigated_mean_year = [row[4] for row in results]  # Apply unit conversion if necessary
+            precip_mean_year = [row[3]* 0.0393  for row in results]  # Apply unit conversion if necessary
+            irrigated_mean_year = [row[4]* 0.0393 for row in results]  # Apply unit conversion if necessary
 
             # Pass the data to the context
             context = {
