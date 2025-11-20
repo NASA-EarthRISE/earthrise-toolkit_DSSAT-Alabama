@@ -84,9 +84,9 @@ function loadChart() {
         xAxis: { categories: years },
         yAxis: {
             min: 0,
-            title: { text: 'Mean Yield (mm)' }
+            title: { text: 'Mean Yield (inches)' }
         },
-        tooltip: { shared: true, valueSuffix: ' mm' },
+        tooltip: { shared: true, valueSuffix: ' inches' },
         plotOptions: {
             column: {
                 stacking: 'normal',
@@ -135,11 +135,11 @@ function loadChart() {
                 innerSize: '50%',
                 dataLabels: {
                     enabled: true,
-                    format: '{point.name}: {point.y} mm'
+                    format: '{point.name}: {point.y} inches'
                 }
             }
         },
-        tooltip: { pointFormat: '<b>{point.y} mm</b>' },
+        tooltip: { pointFormat: '<b>{point.y} inches</b>' },
         series: [
             {
                 name: 'Overall Mean',
