@@ -84,9 +84,9 @@ function loadChart() {
         xAxis: { categories: years },
         yAxis: {
             min: 0,
-            title: { text: 'Mean Yield (inches)' }
+            title: { text: 'Total Water (in)' }
         },
-        tooltip: { shared: true, valueSuffix: ' inches' },
+        tooltip: { shared: true, valueSuffix: ' in' },
         plotOptions: {
             column: {
                 stacking: 'normal',
@@ -135,11 +135,11 @@ function loadChart() {
                 innerSize: '50%',
                 dataLabels: {
                     enabled: true,
-                    format: '{point.name}: {point.y} inches'
+                    format: '{point.name}: {point.y} in'
                 }
             }
         },
-        tooltip: { pointFormat: '<b>{point.y} inches</b>' },
+        tooltip: { pointFormat: '<b>{point.y} in</b>' },
         series: [
             {
                 name: 'Overall Mean',
