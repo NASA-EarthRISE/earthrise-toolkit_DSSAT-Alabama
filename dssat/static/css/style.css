@@ -1,1 +1,37 @@
-#map { height:100%; }
+html, body {
+  overflow-x: hidden !important;  /* Prevent horizontal scroll */
+    /*overflow-y: hidden;*/
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Make sure map container and map are exactly sized */
+#map-container, #map {
+  width: 100vw;
+  height: calc(100vh - 110px); /* Adjust for navbar + footer height */
+  overflow: hidden;
+}
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+  height: 50px;
+  background-color: #0077c8;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  overflow-x: hidden;
+}
+
+.footer > .container-fluid {
+  max-width: 1200px; /* or your preferred width */
+  margin: 0 auto;
+  padding-left: 15px;
+  padding-right: 15px;
+    overflow-y: hidden;
+
+}

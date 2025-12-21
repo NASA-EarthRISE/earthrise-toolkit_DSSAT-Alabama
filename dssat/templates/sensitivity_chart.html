@@ -91,7 +91,7 @@
   <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0077c8;height: 70px">
     <div class="container-fluid">
  <a class="navbar-brand" href="{% url 'home' %}">
-          <img src="{% static 'img/UAH_wht_logo.png' %}" alt="UAH logo" style="height:40px; max-width: none;"></a>
+          <img src="{% static 'img/AL_Office_of_Climatologist_Seal-02.png' %}" alt="UAH logo" style="height:50px; max-width: none;"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -267,7 +267,6 @@
     </div>
   </div>
 </div>
-
   <script src="{% static 'js/sensitivity.js' %}"></script>
   <script src="{% static 'highcharts_config/baseline_template.js' %}"></script>
   <script id="charts">
@@ -279,5 +278,11 @@
     {{ stress_chart_water|safe }}
     {{ stress_chart_nitrogen|safe }}
   </script>
+<footer class="footer">
+  <div style="display: flex; align-items: center; padding-left: 15px; height: 100%;">
+    <img src="{% static 'img/UAH_wht_logo.png' %}" alt="UAH logo" style="height:30px;">
+  </div>
+</footer>
+
 </body>
 </html>
