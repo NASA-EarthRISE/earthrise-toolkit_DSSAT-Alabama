@@ -97,16 +97,17 @@ function loadChart() {
 
         // Swapping default blue and purple for Rainfed and Precipitation
         series: [
+              {
+                name: 'Irrigated Mean',  // Now using purple for Rainfed Mean
+                data: roundData(irrigated_mean_year),  // Rounded to integer
+                color: '#9B59B6'
+            },
             {
                 name: 'Precipitation Mean',  // Now using blue for Precipitation Mean
                 data: roundData(precip_mean_year),  // Rounded to integer
-                color: '#4A90E2' // Blue for Precipitation (bottom)
+                color: '#4A90E2'
             },
-            {
-                name: 'Irrigated Mean',  // Now using purple for Rainfed Mean
-                data: roundData(irrigated_mean_year),  // Rounded to integer
-                color: '#9B59B6'  // Purple for Rainfed (top)
-            }
+
         ]
     });
 
