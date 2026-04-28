@@ -9,7 +9,6 @@ dependencies:
   - tqdm
   - netcdf4
   - scikit-learn
-  - gunicorn
   - pip
   - pip:
       - django-colorfield==0.9.0
@@ -25,5 +24,7 @@ dependencies:
       - py==1.11.0
       - pyproj==3.6.1
       - rasterio==1.3.10
-      - requests==2.32.3
+      - requests==2.33.1
       - shapely==2.0.4
+      - sqlalchemy==2.0.49
+      - matplotlib==3.10.9
