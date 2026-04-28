@@ -8,7 +8,7 @@ for this application to avoid any issues.
 Conda (To manage packages within the application own environment)
 
 ### Environment
-- Create the env
+- Create the environment
 
 ```commandline
 conda env create -f environment.yml
@@ -36,12 +36,12 @@ The format will be:
 }
 ```
 
-- enter the environment
+- Enter the environment
 
 ```shell
 conda activate DssatWeb
 ```
-- Install dssat_service and spatialDSSAT by going into respective directories and running the following command
+- Install _dssat_service_ and _spatialDSSAT_ by going into respective directories and running the following command
 
 ```shell
 pip install . e
