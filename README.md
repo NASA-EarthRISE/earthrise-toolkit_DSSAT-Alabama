@@ -15,11 +15,7 @@ conda env create -f environment.yml
 ```
 
 Add a file named data.json in the base directory.  This file will hold a json object containing
-the siteID for your application, SECRET_KEY, ALLOWED_HOSTS, CSRF_TRUSTED_ORIGINS, ACCOUNT_DEFAULT_HTTP_PROTOCOL,
-UPLOAD_ROOT, CACHE_LOCATION, DEBUG_ENABLED, and LOG_FILE.  
-Both ALLOWED_HOSTS and CSRF_TRUSTED_ORIGINS can include multiple entries comma separated in the array.
-
-The format will be:
+the following fields:
 
 ```json
 {
