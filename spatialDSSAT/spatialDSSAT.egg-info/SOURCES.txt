@@ -1,6 +1,10 @@
 README.md
 setup.py
 ./setup.py
+./build/lib/setup.py
+./build/lib/spatialDSSAT/__init__.py
+./build/lib/spatialDSSAT/run.py
+./build/lib/spatialDSSAT/utils.py
 ./spatialDSSAT/__init__.py
 ./spatialDSSAT/run.py
 ./spatialDSSAT/utils.py

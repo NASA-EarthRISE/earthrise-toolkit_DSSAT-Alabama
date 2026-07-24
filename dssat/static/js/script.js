@@ -152,7 +152,7 @@ info.onAdd = function (map) {
 
 // method that we will use to update the control based on feature properties passed
 info.update = function (props) {
-    this._div.innerHTML = '<h6>Average forecasted yield</h6>' +  (props ?
+    this._div.innerHTML = '<h2 class="h6">Average forecasted yield</h2>' +  (props ?
         '<b>' + props.admin1 + '</b><br />' + props.season_nam + ' season <br>'
         + Math.round(props.pred) + ' kg/ha'
         : 'Hover over a county');
@@ -219,3 +219,17 @@ function load_irrigation_charts(admin1){
         +'//'+window.location.host
         +'/demo/irrigation/'+admin1+'/';
 }
+
+// Ensure Leaflet attribution SVG logo meets contrast requirements (SC 1.4.3)
+// The SVG uses hardcoded fill attributes; override after map tiles load.
+map.on('load', function () {
+    document.querySelectorAll('.leaflet-control-attribution a svg *').forEach(function(el) {
+        el.style.fill = '#004080';
+    });
+});
+// Also apply immediately in case the event already fired
+setTimeout(function() {
+    document.querySelectorAll('.leaflet-control-attribution a svg *').forEach(function(el) {
+        el.style.fill = '#004080';
+    });
+}, 500);

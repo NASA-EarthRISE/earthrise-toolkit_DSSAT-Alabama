@@ -1,0 +1,8 @@
+{
+  "chromeLaunchConfig": {
+    "executablePath": "C:\\Users\\washmall\\.cache\\puppeteer\\chrome\\win64-150.0.7871.24\\chrome-win64\\chrome.exe",
+    "args": ["--no-sandbox", "--disable-setuid-sandbox"]
+  },
+  "timeout": 60000,
+  "wait": 2000
+}

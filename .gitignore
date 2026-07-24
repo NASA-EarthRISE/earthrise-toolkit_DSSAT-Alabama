@@ -13,3 +13,13 @@
 # Ignore static files directory
 #static/
 db.sqlite3
+
+.claude/
+nul
+spatialDSSAT/build
+pa11y_results/
+dssat_service/dssatservice.egg-info/SOURCES.txt
+dssat_service/dssatservice.egg-info/dependency_links.txt
+dssat_service/dssatservice.egg-info/top_level.txt
+
+spatialDSSAT/spatialDSSAT.egg-info/
