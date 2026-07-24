@@ -35,3 +35,83 @@ html, body {
     overflow-y: hidden;
 
 }
+
+/* ── Accessibility fixes ───────────────────────────────────────── */
+
+/* Skip navigation link (Bootstrap 5's visually-hidden-focusable may
+   not load on pages without Bootstrap CSS; define it here too) */
+.visually-hidden-focusable {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+.visually-hidden-focusable:focus,
+.visually-hidden-focusable:focus-within {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  padding: 0.25rem 0.5rem !important;
+  margin: 0 !important;
+  overflow: visible !important;
+  clip: auto !important;
+  white-space: normal !important;
+  background-color: #fff;
+  color: #000;
+  z-index: 9999;
+  display: block;
+}
+
+/* Ensure nav links use pure white for 4.74:1 contrast on #0077c8 */
+.navbar .nav-link {
+  color: #ffffff !important;
+}
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+  color: #e0e0e0 !important;
+}
+
+/* Opaque backgrounds on Leaflet controls to guarantee contrast */
+.leaflet-control-zoom,
+.leaflet-control-attribution {
+  background-color: #ffffff !important;
+  opacity: 1 !important;
+}
+.leaflet-control-zoom a,
+.leaflet-control-attribution a {
+  color: #0055a0 !important;
+}
+/* Ensure Leaflet logo SVG inside attribution link has sufficient contrast
+   (#004080 on #fff = 8.2:1 — passes WCAG AA and AAA) */
+.leaflet-control-attribution a svg,
+.leaflet-control-attribution a svg *,
+.leaflet-control-attribution a svg path {
+  fill: #004080 !important;
+}
+.leaflet-control-attribution {
+  color: #333333 !important;
+}
+
+/* Floating yield summary panel — responsive max-width for narrow
+   viewports (SC 1.4.10 Reflow) */
+#floating_div {
+  max-width: calc(100vw - 40px) !important;
+  overflow-wrap: break-word;
+}
+
+/* Responsive footer: switch from fixed to normal flow below 400 px
+   so it does not force horizontal scrolling at 320 CSS px width */
+@media (max-width: 400px) {
+  .footer {
+    position: relative;
+    width: 100%;
+  }
+  #map-container, #map {
+    height: calc(100vh - 160px);
+  }
+}

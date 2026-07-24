@@ -1,44 +1,47 @@
 <html lang="en">
 {% load static %}
 <head>
-    <title>DSSAT-Web</title>
+    <title>Irrigation Charts | DSSAT-Web Alabama</title>
       <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
 
     <script src="{% static 'js/highcharts/highcharts.js' %}"></script>
+    <script src="{% static 'js/highcharts/accessibility.js' %}"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta name="referrer" content="strict-origin-when-cross-origin">
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0077c8;height: 70px">
+<a href="#main-content" class="visually-hidden-focusable">Skip to main content</a>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #0077c8;height: 70px" role="navigation" aria-label="Main navigation">
     <div class="container-fluid">
         <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'img/AL_Office_of_Climatologist_Seal-02.png' %}" alt="UAH logo" style="height:50px; max-width: none;">
+            <img src="{% static 'img/AL_Office_of_Climatologist_Seal-02.png' %}" alt="UAH Office of State Climatology seal" style="height:50px; max-width: none;">
         </a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <h3 style="display: inline; color: white; margin: auto; text-align: center; width: 100%;">Dssat Web App : V1</h3>
+        <h1 style="display: inline; color: white; margin: auto; text-align: center; width: 100%; font-size: 1.75rem; font-weight: 500;">DSSAT-Web Alabama</h1>
 
         <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{% url 'home' %}">Map</a>
+                    <a class="nav-link text-white" href="{% url 'home' %}">Map</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-light" href="{% url 'about' %}">About</a>
+                    <a class="nav-link text-white" href="{% url 'about' %}">About</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
 
+<main id="main-content">
 <div class="m-auto" style="width:90%">
     <div class="row m-2">
         <div class="col">
-            <h4>Long Term Average Yield results in {{admin1}}</h4>
+            <h2>Long Term Average Yield results in {{admin1}}</h2>
             <p>The plots below display the long term average yield across all years (first chart) and long term average by year (second chart) for the maize.</p>
         </div>
 
@@ -99,9 +102,11 @@
 <script id="irrigated-mean-year" type="application/json">{{ irrigated_mean_year|safe }}</script>
 
 <script src="{% static 'js/irrigation.js' %}"></script>
-<footer class="footer">
+</div>
+</main>
+<footer class="footer" role="contentinfo">
   <div style="display: flex; align-items: center; padding-left: 15px; height: 100%;">
-    <img src="{% static 'img/UAH_wht_logo.png' %}" alt="UAH logo" style="height:30px;">
+    <img src="{% static 'img/UAH_wht_logo.png' %}" alt="University of Alabama in Huntsville logo" style="height:30px;">
   </div>
 </footer>
 </body>
