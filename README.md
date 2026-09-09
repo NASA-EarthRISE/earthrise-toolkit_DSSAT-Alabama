@@ -50,3 +50,6 @@ python manage.py runserver
 ```
 
 Note: These instructions are for development only.
+
+This application is distributed by EarthRISE under the terms of the GPLv3 License. See
+[LICENSE](https://github.com/NASA-EarthRISE/earthrise-toolkit_DSSAT-Alabama/blob/main/LICENSE) in this directory for more information.
